@@ -1,11 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.apkglobal.tablemaster.MainActivity">
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ajdustmebt"
+        android:id="@+id/btn_adjust"
+        android:layout_alignParentBottom="true"
+        />
 
+    <Button
+        app:layout_widthPercent="80%"
+        app:layout_heightPercent="10%"
+        android:text="Clean database"
+        android:id="@+id/btn_delete"
+        android:layout_centerInParent="true"/>
+    <Button
+
+        app:layout_widthPercent="80%"
+        app:layout_heightPercent="10%"
+        android:text="Inception"
+        android:id="@+id/btn_incept"
+        android:layout_above="@+id/btn_populate"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        app:layout_widthPercent="80%"
+        app:layout_heightPercent="10%"
+        android:text="Populate database"
+        android:id="@+id/btn_populate"
+        android:layout_above="@+id/btn_read"
+        android:layout_centerHorizontal="true"/>
+    <Button
+        app:layout_widthPercent="75%"
+        app:layout_heightPercent="10%"
+        android:text="Read"
+        android:id="@+id/btn_read"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/btn_delete"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,4 +52,4 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+</android.support.percent.PercentRelativeLayout>

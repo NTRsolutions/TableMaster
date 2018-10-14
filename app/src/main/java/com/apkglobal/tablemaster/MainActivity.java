@@ -1,12 +1,15 @@
 package com.apkglobal.tablemaster;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +19,7 @@ import java.util.ArrayList;
 import jxl.Sheet;
 import jxl.Workbook;
 
+import static com.apkglobal.tablemaster.R.id.start;
 import static com.apkglobal.tablemaster.R.id.tv;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,14 +35,58 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        incept();
-        populateDays();
+
+        Button btn_adjust = (Button)findViewById(R.id.btn_adjust);
+        btn_adjust.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, Adjustment.class));
+            }
+        });
+
+        Button btn_incept = (Button)findViewById(R.id.btn_incept);
+        btn_incept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                incept();
+            }
+        });
+
+        Button btn_populate = (Button) findViewById(R.id.btn_populate);
+        btn_populate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                populate();
+            }
+        });
+
+        Button btn_read = (Button) findViewById(R.id.btn_read);
+        btn_read.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                read();
+            }
+        });
+
+        Button btn_delete = (Button) findViewById(R.id.btn_delete);
+        btn_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wipeDatabase();
+            }
+        }); /*calls for database table purge*/
+
         printList(getFaculty());
-        populate();
-        read();
+
     }
 
-    public void read() /*Displays all records from the table*/ {
+    public void wipeDatabase() {
+        sd = openOrCreateDatabase("minor_project", Context.MODE_PRIVATE, null);
+        sd.execSQL("drop table timetable");
+        sd.close();
+    } /*wipes the slate clean for the database*/
+
+    public void read() {
         sd = openOrCreateDatabase("minor_project", Context.MODE_PRIVATE, null);
         Log.d(TAG, " commencing reading operation from the database...");
         Cursor sc = sd.rawQuery("select * from timetable", null);
@@ -60,9 +108,9 @@ public class MainActivity extends AppCompatActivity {
         sd.close();
 
 
-    }
+    }   /*Displays all records from the table*/
 
-    public void populate()/*Populates the timetable in sqlite database*/ {
+    public void populate() {
         try {
             String contents_facultyName = "";
             String contents = "";
@@ -75,14 +123,14 @@ public class MainActivity extends AppCompatActivity {
             Sheet sheet = workbook.getSheet(0);
             int rows = sheet.getRows();
             int cols = sheet.getColumns();
-            Log.d(TAG,"rows: "+rows+" columns: "+cols);
-
+            Log.d(TAG, "rows: " + rows + " columns: " + cols);
+            populateDays();
             int time_index = 1;
             int day_index = 0;
             for (int faculty = 0; faculty < cols - 2; faculty += 1) {
                 lectures.clear();
                 contents_facultyName = sheet.getCell(faculty + 2, 0).getContents();
-                for (int row = 1; row <rows; row++) {
+                for (int row = 1; row < rows; row++) {
                     contents_day = sheet.getCell(day_index, row).getContents();
                     contents_time = sheet.getCell(time_index, row).getContents();
                     contents = sheet.getCell(faculty + 2, row).getContents();
@@ -131,14 +179,13 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "" + exception);
 
         }
-    }
+    }   /*Populates the timetable in sqlite database*/
 
     public void incept() {
 
         Log.d(TAG, "Creating the timetable in sqlite database");
         sd = openOrCreateDatabase("minor_project", Context.MODE_PRIVATE, null);
-        sd.execSQL("drop table timetable");
-        sd.execSQL("create table if not exists timetable (id integer not null primary key autoincrement, day text, faculty_id integer, faculty text);");
+        sd.execSQL("create table if not exists timetable (id integer not null primary key autoincrement, day text, faculty_id integer, faculty text, priority int default 0);");
         timeSlotList = getTimeSlots();
         Log.d(TAG, "Adding timeslots to the table");
 
@@ -213,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
             facultyList.clear(); /*Resetting the facultyList | arrayList */
             for (int j = 0; j < col - 2; j++) {
                 contents = sheet.getCell(j + 2, 0).getContents(); //add the fetched data to the array list | Faculties
-                Log.d(TAG, "j: " + j + " contetns: " + contents);
+                Log.d(TAG, "j: " + j + " contents: " + contents);
                 facultyList.add(contents);
             }
         } catch (Exception exception) {

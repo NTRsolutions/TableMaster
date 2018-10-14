@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linear_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.apkglobal.tablemaster.Adjustment">
+
+
+    <Button
+        android:id="@+id/btn_adjust"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Adjust" />
+
+    <Button
+        android:id="@+id/btn_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="show answers" />
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/buttons_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:flexWrap="wrap">
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+    <!--Horizontal sacolling layout section for possible adjustment displaying spinners-->
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/spinner_layout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#773695e4"
+        android:orientation="vertical">
+
+    </LinearLayout>
+</ScrollView>
+
+</LinearLayout>
